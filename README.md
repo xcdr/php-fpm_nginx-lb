@@ -8,13 +8,17 @@ Sources are on shared volume accessible for all containers, nginx also serve sta
 
 This is not perfect setup, better result is possible with Nginx Plus or Traefik as load balancer.
 
+## Build
+
+    make && make docker-push
+
 ## Deploy app:
 
-    docker-compose up --build --detach --scale php-fpm=2
+    docker-compose up --detach --scale php-fpm=2
 
 ## Scale app:
 
-    docker-compose up --scale php-fpm=4
+    docker-compose up --detach --scale php-fpm=4
 
 ## Test app:
 
