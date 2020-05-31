@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app-deployment
+  labels:
+    app: web-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+    spec:
+      volumes:
+        - name: web-app-storage
+          persistentVolumeClaim:
+            claimName: web-app-claim
+      containers:
+        - name: nginx
+          image: xcdr/php-fpm_nginx-lb_nginx_k8s:latest
+          volumeMounts:
+            - mountPath: "/var/www/html"
+              name: web-app-storage
+        - name: php-fpm
+          image: xcdr/php-fpm_nginx-lb_php-fpm:latest
+          ports:
+            - containerPort: 80
+              name: "http-server"
+          volumeMounts:
+            - mountPath: "/var/www/html"
+              name: web-app-storage
+          env:
+            - name: APP_ENV
+              value: "production"
